@@ -15,28 +15,25 @@ def coregen_targets(env, target, source):
 
 def run_coregen(env, target, source):
     xco_file = str(source[0])
-    cg_work = tempfile.mkdtemp(dir='.')
-    cg_out = tempfile.mkdtemp(dir='.')
-    out_dir = env['outdir']
-    coregen_settings = {'asysymbol': 'false',
-                        'designentry': 'Advanced',
-                        'verilogsim': 'true',
-                        'vhdlsim': 'false',
-                        'workingdirectory': cg_work,
-                        'outputdirectory': cg_out} # TODO
+    work_dir = tempfile.mkdtemp(dir='.')
+    out_dir = tempfile.mkdtemp(dir='.')
+    options = env['options']
+    # TODO: what if options are set such that no .v is generated?
+    options['workingdirectory'] = work_dir,
+    options['outputdirectory'] = out_dir
 
     with tempfile.NamedTemporaryFile(suffix='.cgp', dir='.') as f:
         cgp_file = f.name
-        for (k, v) in coregen_settings.iteritems():
+        for (k, v) in options.iteritems():
             print >> f, "SET %s = %s" % (k, str(v))
         f.flush()
         env.Execute('coregen -b %s -p %s' % (xco_file, cgp_file))
 
     for t in target[:-1]: # .v, .ngc, .xco
-        Execute(Move(t, replace_path(str(t), cg_out)))
+        Execute(Move(t, replace_path(str(t), out_dir)))
     Execute(Move(target[-1], 'coregen.log')) # .log
-    Execute(Delete(cg_work))
-    Execute(Delete(cg_out))
+    Execute(Delete(work_dir))
+    Execute(Delete(out_dir))
     Execute(Delete(replace_suffix(cgp_file, '.cgc')))
 
 #----------------------------------------------------------
