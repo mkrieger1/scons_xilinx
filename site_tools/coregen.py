@@ -42,11 +42,11 @@ def run_coregen(env, target, source):
 #----------------------------------------------------------
 
 def generate(env, **kw):
-    bld_run_coregen = Builder(action=run_coregen,
+    coregen_builder = Builder(action=run_coregen,
                               suffix='.v',
                               src_suffix='.xco',
                               emitter=coregen_targets)
-    env.Append(BUILDERS={'Coregen': bld_run_coregen})
+    env.Append(BUILDERS={'Coregen': coregen_builder})
     
 # this is not actually called by scons...
 def exists(env):
