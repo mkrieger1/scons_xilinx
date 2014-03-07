@@ -17,7 +17,10 @@ def ngdbuild_emitter(env, target, source):
     return target, source
 
 def run_ngdbuild(env, target, source):
-    options = env['options']
+    try:
+        options = env['options']
+    except KeyError:
+        options = {}
     for k in enforced_options:
         if k in options:
             del options[k]
