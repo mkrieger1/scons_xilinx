@@ -1,6 +1,6 @@
 from SCons.Script import *
 import tempfile
-from util import replace_suffix
+from util import get_suffix, replace_suffix
 
 #----------------------------------------------------------
 # builder: HDL files -> .ngc, .syr
@@ -8,29 +8,23 @@ from util import replace_suffix
 #----------------------------------------------------------
 
 def xst_targets(env, target, source):
-    # append list of HDL files to source
-    lang_map = source[0].read()
-    for lang, files in lang_map.iteritems():
-        for f in files:
-            source.append(f)
-    # append .syr to target
     syr_file = replace_suffix(str(target[0]), '.syr')
     target.append(syr_file)
     return target, source
 
 def run_xst(env, target, source):
-    # hdl_language_map, hdl_files = source
-    lang_map = source[0].read()
     ngc_file, syr_file = map(str, target)
-    prj_file = tempfile.NamedTemporaryFile(suffix='.prj', dir='.')
+    prj = tempfile.NamedTemporaryFile(suffix='.prj', dir='.')
+    prj_file = prj.name
 
-    for lang, files in lang_map.iteritems():
-        for f in files:
-            print >> prj_file, '%s work "%s"' % (lang, str(f))
-    prj_file.flush()
+    for s in source:
+        lang = {'.v': 'verilog',
+                '.vhd': 'vhdl'}[get_suffix(str(s))]
+        print >> prj, '%s work "%s"' % (lang, str(s))
+    prj.flush()
 
     options = env['options']
-    options['ifn'] = prj_file.name
+    options['ifn'] = prj_file
     options['ofn'] = ngc_file
 
     with tempfile.NamedTemporaryFile(suffix='.xst', dir='.') as f:
@@ -40,7 +34,7 @@ def run_xst(env, target, source):
         f.flush()
         env.Execute('xst -ifn %s -ofn %s' % (f.name, syr_file))
 
-    prj_file.close()
+    prj.close()
     for suf in ['.lso', '.ngc_xst.xrpt']:
         Execute(Delete(replace_suffix(ngc_file, suf)))
     Execute(Delete('_xmsgs'))
