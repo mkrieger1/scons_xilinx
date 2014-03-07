@@ -3,32 +3,34 @@ import tempfile
 from util import replace_suffix
 
 #----------------------------------------------------------
-# builder: HDL file lists -> .prj
-#----------------------------------------------------------
-
-def create_prj(env, target, source):
-    hdl_files = source[0].read()
-    with open(str(target[0]), 'w') as f:
-        for lang in ['verilog', 'vhdl']:
-            for s in hdl_files[lang]:
-                print >> f, '%s work "%s"' % (lang, str(s))
-
-#----------------------------------------------------------
-# builder: XST .prj -> .ngc, .syr
-# intermediate step: create .xst file
+# builder: HDL files -> .ngc, .syr
+# intermediate steps: create .prj and .xst files
 #----------------------------------------------------------
 
 def xst_targets(env, target, source):
+    # append list of HDL files to source
+    lang_map = source[0].read()
+    for lang, files in lang_map.iteritems():
+        for f in files:
+            source.append(f)
+    # append .syr to target
     syr_file = replace_suffix(str(target[0]), '.syr')
     target.append(syr_file)
     return target, source
 
 def run_xst(env, target, source):
+    # hdl_language_map, hdl_files = source
+    lang_map = source[0].read()
     ngc_file, syr_file = map(str, target)
-    prj_file = str(source[0])
+    prj_file = tempfile.NamedTemporaryFile(suffix='.prj', dir='.')
+
+    for lang, files in lang_map.iteritems():
+        for f in files:
+            print >> prj_file, '%s work "%s"' % (lang, str(f))
+    prj_file.flush()
 
     options = env['options']
-    options['ifn'] = prj_file
+    options['ifn'] = prj_file.name
     options['ofn'] = ngc_file
 
     with tempfile.NamedTemporaryFile(suffix='.xst', dir='.') as f:
@@ -38,6 +40,7 @@ def run_xst(env, target, source):
         f.flush()
         env.Execute('xst -ifn %s -ofn %s' % (f.name, syr_file))
 
+    prj_file.close()
     for suf in ['.lso', '.ngc_xst.xrpt']:
         Execute(Delete(replace_suffix(ngc_file, suf)))
     Execute(Delete('_xmsgs'))
@@ -46,16 +49,12 @@ def run_xst(env, target, source):
 #----------------------------------------------------------
 
 def generate(env, **kw):
-    xst_prj_builder = Builder(action=create_prj,
-                              suffix='.prj')
-
     xst_ngc_builder = Builder(action=run_xst,
                               suffix='.ngc',
                               src_suffix='.prj',
                               emitter=xst_targets)
 
-    env.Append(BUILDERS={'XstProject': xst_prj_builder,
-                         'XstRun': xst_ngc_builder})
+    env.Append(BUILDERS={'XstRun': xst_ngc_builder})
     
 # this is not actually called by scons...
 def exists(env):
