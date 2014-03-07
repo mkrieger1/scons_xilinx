@@ -7,6 +7,11 @@ from util import get_suffix, replace_suffix
 # intermediate steps: create .prj and .xst files
 #----------------------------------------------------------
 
+enforced_options = {
+    'ifmt': 'mixed',
+    'ofmt': 'NGC'
+}
+
 def xst_targets(env, target, source):
     syr_file = replace_suffix(str(target[0]), '.syr')
     target.append(syr_file)
@@ -16,6 +21,7 @@ def run_xst(env, target, source):
     ngc_file, syr_file = map(str, target)
     prj = tempfile.NamedTemporaryFile(suffix='.prj', dir='.')
     prj_file = prj.name
+    tmpdir = tempfile.mkdtemp(dir='.')
 
     for s in source:
         lang = {'.v': 'verilog',
@@ -26,6 +32,8 @@ def run_xst(env, target, source):
     options = env['options']
     options['ifn'] = prj_file
     options['ofn'] = ngc_file
+    options['tmpdir'] = tmpdir
+    options.update(enforced_options)
 
     with tempfile.NamedTemporaryFile(suffix='.xst', dir='.') as f:
         print >> f, "run"
@@ -37,8 +45,9 @@ def run_xst(env, target, source):
     prj.close()
     for suf in ['.lso', '.ngc_xst.xrpt']:
         Execute(Delete(replace_suffix(ngc_file, suf)))
-    Execute(Delete('_xmsgs')) # TODO
-    Execute(Delete('xst')) # TODO
+    Execute(Delete(tmpdir))
+    Execute(Delete('xst'))
+    Execute(Delete('_xmsgs'))
 
 #----------------------------------------------------------
 
