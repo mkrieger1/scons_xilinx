@@ -7,6 +7,13 @@ from util import replace_suffix, replace_path
 # intermediate step: create .cgp file
 #----------------------------------------------------------
 
+# enforce generation of .v file
+enforced_options = {
+    'implementationfiletype': 'Ngc',
+    'simulationfiles': 'Behavioral',
+    'verilogsim': 'true'
+}
+
 def coregen_targets(env, target, source):
     v_file = replace_path(str(target[0]), env['outdir'])
     target = [v_file] + [replace_suffix(v_file, suf)
@@ -20,11 +27,7 @@ def run_coregen(env, target, source):
     options = env['options']
     options['workingdirectory'] = work_dir
     options['outputdirectory'] = out_dir
-
-    # enforce generation of .v file
-    options['implementationfiletype']='Ngc'
-    options['simulationfiles']='Behavioral'
-    options['verilogsim']='true'
+    options.update(enforced_options)
 
     with tempfile.NamedTemporaryFile(suffix='.cgp', dir='.') as f:
         cgp_file = f.name
