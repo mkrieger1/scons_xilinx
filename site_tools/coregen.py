@@ -3,7 +3,7 @@ import tempfile
 from util import replace_suffix, replace_path
 
 #----------------------------------------------------------
-# builder: Coregen .xco -> .ngc, .v, .xco, .log
+# builder: Coregen .xco -> .v, .ngc, .xco, .log
 # intermediate step: create .cgp file
 #----------------------------------------------------------
 
