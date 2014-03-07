@@ -18,9 +18,13 @@ def run_coregen(env, target, source):
     work_dir = tempfile.mkdtemp(dir='.')
     out_dir = tempfile.mkdtemp(dir='.')
     options = env['options']
-    # TODO: what if options are set such that no .v is generated?
-    options['workingdirectory'] = work_dir,
+    options['workingdirectory'] = work_dir
     options['outputdirectory'] = out_dir
+
+    # enforce generation of .v file
+    options['implementationfiletype']='Ngc'
+    options['simulationfiles']='Behavioral'
+    options['verilogsim']='true'
 
     with tempfile.NamedTemporaryFile(suffix='.cgp', dir='.') as f:
         cgp_file = f.name
