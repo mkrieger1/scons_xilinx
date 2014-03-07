@@ -57,7 +57,7 @@ def generate(env, **kw):
                               src_suffix='.prj',
                               emitter=xst_targets)
 
-    env.Append(BUILDERS={'XstRun': xst_ngc_builder})
+    env.Append(BUILDERS={'XstSynthesis': xst_ngc_builder})
     
 # this is not actually called by scons...
 def exists(env):
