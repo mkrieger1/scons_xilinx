@@ -37,8 +37,8 @@ def run_xst(env, target, source):
     prj.close()
     for suf in ['.lso', '.ngc_xst.xrpt']:
         Execute(Delete(replace_suffix(ngc_file, suf)))
-    Execute(Delete('_xmsgs'))
-    Execute(Delete('xst'))
+    Execute(Delete('_xmsgs')) # TODO
+    Execute(Delete('xst')) # TODO
 
 #----------------------------------------------------------
 
