@@ -7,9 +7,9 @@ from util import replace_suffix
 #----------------------------------------------------------
 
 def map_targets(env, target, source):
-    ncd_file = str(target[0])
+    ngd_file = str(source[0])
     for suf in ['.mrp', '.pcf']:
-        target.append(replace_suffix(ncd_file, suf))
+        target.append(replace_suffix(ngd_file, suf))
     return target, source
 
 def run_map(env, target, source):
@@ -34,14 +34,14 @@ def run_map(env, target, source):
 
     for suf in ['.map', '_map.xrpt', '.ngm',
                 '_summary.xml', '_usage.xml']:
-        Execute(Delete(replace_suffix(ncd_file, suf)))
+        Execute(Delete(replace_suffix(ngd_file, suf)))
     Execute(Delete('_xmsgs'))
 
 #----------------------------------------------------------
 
 def generate(env, **kw):
     map_builder = Builder(action=run_map,
-                          suffix='.ncd',
+                          suffix='_map.ncd',
                           src_suffix='.ngd',
                           emitter=map_targets)
 
