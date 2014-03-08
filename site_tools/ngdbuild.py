@@ -9,7 +9,7 @@ from util import replace_suffix
 enforced_options = ['sd', 'uc']
 
 def ngdbuild_emitter(env, target, source):
-    bld_file = replace_suffix(str(target[0]), '.bld')
+    bld_file = replace_suffix(target[0], '.bld')
     target.append(bld_file)
     source.extend(env['ucf_files'])
     if 'search_dirs' in env:

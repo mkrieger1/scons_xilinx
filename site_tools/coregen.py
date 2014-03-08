@@ -15,7 +15,7 @@ enforced_options = {
 }
 
 def coregen_targets(env, target, source):
-    v_file = replace_path(str(target[0]), env['outdir'])
+    v_file = replace_path(target[0], env['outdir'])
     target = [v_file] + [replace_suffix(v_file, suf)
                          for suf in ['.ngc', '.xco', '.log']]
     return target, source
@@ -37,7 +37,7 @@ def run_coregen(env, target, source):
         env.Execute('coregen -b %s -p %s' % (xco_file, cgp_file))
 
     for t in target[:-1]: # .v, .ngc, .xco
-        Execute(Move(t, replace_path(str(t), out_dir)))
+        Execute(Move(t, replace_path(t, out_dir)))
     Execute(Move(target[-1], 'coregen.log')) # .log
     Execute(Delete(work_dir))
     Execute(Delete(out_dir))

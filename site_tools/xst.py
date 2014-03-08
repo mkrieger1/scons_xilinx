@@ -13,7 +13,7 @@ enforced_options = {
 }
 
 def xst_targets(env, target, source):
-    syr_file = replace_suffix(str(target[0]), '.syr')
+    syr_file = replace_suffix(target[0], '.syr')
     target.append(syr_file)
     return target, source
 
@@ -25,7 +25,7 @@ def run_xst(env, target, source):
 
     for s in source:
         lang = {'.v': 'verilog',
-                '.vhd': 'vhdl'}[get_suffix(str(s))]
+                '.vhd': 'vhdl'}[get_suffix(s)]
         print >> prj, '%s work "%s"' % (lang, str(s))
     prj.flush()
 
