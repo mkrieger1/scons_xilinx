@@ -3,13 +3,14 @@ import tempfile
 from util import replace_suffix
 
 #----------------------------------------------------------
-# builder: .ngd -> .ncd, .mrp, .pcf
+# builder: .ngd -> _map.ncd, _map.mrp, .pcf
 #----------------------------------------------------------
 
 def map_targets(env, target, source):
     ngd_file = str(source[0])
-    for suf in ['.mrp', '.pcf']:
-        target.append(replace_suffix(ngd_file, suf))
+    ncd_file = str(target[0])
+    target.append(replace_suffix(ncd_file, '.mrp'))
+    target.append(replace_suffix(ngd_file, '.pcf'))
     return target, source
 
 def run_map(env, target, source):
@@ -32,9 +33,10 @@ def run_map(env, target, source):
     env.Execute('map %s %s %s %s' % (opt_str, flag_str,
                                      ngd_file, pcf_file))
 
-    for suf in ['.map', '_map.xrpt', '.ngm',
-                '_summary.xml', '_usage.xml']:
+    for suf in ['_map.xrpt', '_summary.xml', '_usage.xml']:
         Execute(Delete(replace_suffix(ngd_file, suf)))
+    for suf in ['.map', '.ngm']:
+        Execute(Delete(replace_suffix(ncd_file, suf)))
     Execute(Delete('_xmsgs'))
 
 #----------------------------------------------------------

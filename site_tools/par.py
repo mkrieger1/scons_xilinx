@@ -31,10 +31,12 @@ def run_par(env, target, source):
     env.Execute('par %s %s %s %s %s' % (opt_str, flag_str,
                                         ncd_map, ncd_file, pcf_file))
 
-    #for suf in ['.map', '_map.xrpt', '.ngm',
-    #            '_summary.xml', '_usage.xml']:
-    #    Execute(Delete(replace_suffix(ncd_file, suf)))
-    #Execute(Delete('_xmsgs'))
+    for suf in ['_par.xrpt', '.pad', '_pad.csv', '_pad.txt',
+                '.ptwx', '.unroutes', '.xpi']:
+        Execute(Delete(replace_suffix(ncd_file, suf)))
+    Execute(Delete('par_usage_statistics.html'))
+    Execute(Delete('_xmsgs'))
+
 
 #----------------------------------------------------------
 
