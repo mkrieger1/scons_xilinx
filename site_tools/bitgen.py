@@ -44,8 +44,8 @@ def run_bitgen(env, target, source):
 
     for suf in ['_bitgen.xwbt', '_summary.xml', '_usage.xml', '.drc']:
         Execute(Delete(replace_suffix(bit_file, suf)))
-    Execute(Delete('webtalk.log'))
-    Execute(Delete('_xmsgs'))
+    Execute(Delete('webtalk.log')) # why is this not deleted??
+    Execute(Delete('_xmsgs')) # why is this not deleted??
 
 #----------------------------------------------------------
 
