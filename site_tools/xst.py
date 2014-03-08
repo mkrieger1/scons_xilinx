@@ -34,13 +34,18 @@ def run_xst(env, target, source):
     options['ofn'] = ngc_file
     options['tmpdir'] = tmpdir
     options.update(enforced_options)
+    try:
+        intstyle = '-intstyle %s' % (options.pop('intstyle'))
+    except KeyError:
+        intstyle = ''
 
     with tempfile.NamedTemporaryFile(suffix='.xst', dir='.') as f:
         print >> f, "run"
         for k, v in options.iteritems():
             print >> f, "-%s %s" % (k, str(v))
         f.flush()
-        env.Execute('xst -ifn %s -ofn %s' % (f.name, syr_file))
+        env.Execute('xst %s -ifn %s -ofn %s' % (
+                    intstyle, f.name, syr_file))
 
     prj.close()
     for suf in ['.lso', '.ngc_xst.xrpt']:
