@@ -63,6 +63,5 @@ def run_xst(env, target, source):
 
 xst_ngc_builder = Builder(action=run_xst,
                           suffix='.ngc',
-                          src_suffix='.prj',
                           emitter=xst_targets)
 
