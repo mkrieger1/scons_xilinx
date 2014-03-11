@@ -1,0 +1,70 @@
+# ex: set syntax=python:
+
+import os
+env = Environment(ENV=os.environ, tools=['xilinx'])
+
+from xilinx.boards import susibo as device
+
+# project name + source files
+project_name = 'example'
+
+xco_files = ['cores/fifo.xco']
+hdl_files = ['src/example.v']
+ucf_files = ['src/susibo.ucf']
+
+# coregen
+coregen_options = device.coregen_options()
+coregen_out = 'coregen_out'
+
+for xco in xco_files:
+    cg_targets = env.Coregen(xco, outdir=coregen_out,
+                                  options=coregen_options)
+    hdl_files.append(str(cg_targets[0]))
+
+# XST
+xst_options = device.xst_options()
+search_dirs = [coregen_out]
+xst_sd = '{%s}' % (' '.join(search_dirs))
+
+xst_options.update({
+    'intstyle': 'xflow',
+    'top': project_name,
+    'opt_mode': 'speed',
+    'opt_level': 1,
+    'read_cores': 'optimize',
+    'sd': xst_sd,
+})
+
+ngc_file, syr_file = env.XstSynthesis(project_name, hdl_files,
+                                      options=xst_options)
+
+# NGDBuild
+ngdbuild_options = {'intstyle': 'xflow'}
+
+ngd_file, bld_file = env.NgdBuild(ngc_file, ucf_files=ucf_files,
+                                  options=ngdbuild_options)
+
+# MAP
+map_options = {'intstyle': 'xflow'}
+map_flags = ['detail', 'w']
+
+ncd_map_file, mrp_file, pcf_file = env.Map(ngd_file, options=map_options,
+                                                      flags=map_flags)
+
+# PAR
+par_options = {'intstyle': 'xflow'}
+par_flags = ['w']
+
+ncd_file, par_file = env.PlaceRoute(ncd_map_file, options=par_options,
+                                                  flags=par_flags)
+
+
+# BitGen
+bitgen_options = {'intstyle': 'xflow'}
+bitgen_flags = []
+bitgen_suboptions = {'compress': ''}
+
+bit_file, bgn_file = env.BitGen(ncd_file, options=bitgen_options,
+                                          suboptions=bitgen_suboptions,
+                                          flags=bitgen_flags)
+
