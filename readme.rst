@@ -40,9 +40,9 @@ Example:
     env = Environment(tools=['xilinx'])
     env.XstSynthesis('out.ngc', ['source.v', 'module.v'])
 
-For more information, see the example project [#]_.
+To see in more detail how the tools can be used, look at the
+`example project <example/SConstruct>`_.
 
-.. [#] *to do*
 
 Installation
 ============
