@@ -4,7 +4,7 @@
     $ scons install --user : install tools for user only
 
 About
------
+=====
 
 This is a collection of `SCons`_ tools for automating the Xilinx build flow.
 
@@ -14,22 +14,48 @@ This is a collection of `SCons`_ tools for automating the Xilinx build flow.
 :Contact: michael.krieger@ziti.uni-heidelberg.de
 :Date:    2014-03
 
-- Contents: *to do*
-- Usage: *to do*
-- Example project: *to do*
+Contents
+--------
+
+The package makes a set of `Builders`_ available, which you can use in a
+``SConstruct`` or ``SConscript`` file:
+
+.. _Builders: http://www.scons.org/doc/production/HTML/scons-user.html#chap-builders-writing
+
+================  ==================  ================
+Builder           Source files        Target files
+================  ==================  ================
+``Coregen``       ``.xco``            ``.ngc``, ``.v``
+``XstSynthesis``  ``.v``, ``.vhd``    ``.ngc``
+``NgdBuild``      ``.ngc``, ``.ucf``  ``.ngd``
+``Map``           ``.ngd``            ``_map.ncd``
+``PlaceRoute``    ``_map.ncd``        ``.ncd``
+``BitGen``        ``.ncd``            ``.bit``
+================  ==================  ================
+
+Example:
+
+.. code::
+
+    env = Environment(tools=['xilinx'])
+    env.XstSynthesis('out.ngc', ['source.v', 'module.v'])
+
+For more information, see the example project [#]_.
+
+.. [#] *to do*
 
 Installation
-------------
+============
 
 Copy the entire ``xilinx`` directory into a directory
-``<scons-root>/site_scons/site_tools``, where ``<scons-root>`` must be
+``<root>/site_scons/site_tools``, where ``<root>`` must be
 visible to SCons when invoked.
 
-By default, SCons accepts the following locations as ``<scons-root>``:
+By default, SCons accepts the following locations as ``<root>``:
 
-- the current working directory
-- ``~/.scons`` (single-user only)
-- ``/usr/share/scons`` (system wide)
+- the current working directory (where ``SConstruct``/``SConscript`` is)
+- ``$HOME/.scons`` (installation for single user)
+- ``/usr/share/scons`` (installation for all users)
 
 The file copying is handled for you if you call
 
@@ -39,3 +65,14 @@ The file copying is handled for you if you call
 
 where the presence of the ``--user`` option selects between the
 ``~/.scons`` and the ``/usr/share/scons`` location.
+
+If you choose to copy the tools to a different ``<root>`` location,
+you can point SCons to it either by passing the command line argument
+``--site-dir=<root>`` or by using
+
+.. code::
+
+    env = Environment(tools=['xilinx'], toolpath=[<root>])
+
+in the ``SConstruct``/``SConscript`` file.
+
