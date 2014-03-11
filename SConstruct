@@ -6,7 +6,7 @@ from os.path import join, expanduser
 env = Environment(ENV=environ)
 
 
-# installation of xilinx tools
+# installation of xilinx build tools
 
 AddOption('--user', dest='user', action='store_true')
 

@@ -1,4 +1,7 @@
-.. turn this document into an HTML page by typing `scons`
+.. quickstart:
+    $ scons                : turn this document into an HTML page
+    $ scons install        : install tools system wide
+    $ scons install --user : install tools for user only
 
 About
 -----
