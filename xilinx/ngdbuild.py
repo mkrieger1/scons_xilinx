@@ -42,18 +42,10 @@ def run_ngdbuild(env, target, source):
     Execute(Delete('xlnx_auto_0_xdb'))
     Execute(Delete('_xmsgs'))
 
-
 #----------------------------------------------------------
 
-def generate(env, **kw):
-    ngdbuilder = Builder(action=run_ngdbuild,
-                         suffix='.ngd',
-                         src_suffix='.ngc',
-                         emitter=ngdbuild_emitter)
-
-    env.Append(BUILDERS={'NgdBuild': ngdbuilder})
-    
-# this is not actually called by scons...
-def exists(env):
-    return env.Detect('ngdbuild')
+ngdbuilder = Builder(action=run_ngdbuild,
+                     suffix='.ngd',
+                     src_suffix='.ngc',
+                     emitter=ngdbuild_emitter)
 

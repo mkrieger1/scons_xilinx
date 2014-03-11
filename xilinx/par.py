@@ -39,18 +39,10 @@ def run_par(env, target, source):
     Execute(Delete('par_usage_statistics.html'))
     Execute(Delete('_xmsgs'))
 
-
 #----------------------------------------------------------
 
-def generate(env, **kw):
-    par_builder = Builder(action=run_par,
-                          suffix='.ncd',
-                          src_suffix='_map.ncd',
-                          emitter=par_emitter)
-
-    env.Append(BUILDERS={'PlaceRoute': par_builder})
-    
-# this is not actually called by scons...
-def exists(env):
-    return env.Detect('par')
+par_builder = Builder(action=run_par,
+                      suffix='.ncd',
+                      src_suffix='_map.ncd',
+                      emitter=par_emitter)
 

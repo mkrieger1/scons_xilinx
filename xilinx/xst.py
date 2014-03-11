@@ -61,15 +61,8 @@ def run_xst(env, target, source):
 
 #----------------------------------------------------------
 
-def generate(env, **kw):
-    xst_ngc_builder = Builder(action=run_xst,
-                              suffix='.ngc',
-                              src_suffix='.prj',
-                              emitter=xst_targets)
-
-    env.Append(BUILDERS={'XstSynthesis': xst_ngc_builder})
-    
-# this is not actually called by scons...
-def exists(env):
-    return env.Detect('xst')
+xst_ngc_builder = Builder(action=run_xst,
+                          suffix='.ngc',
+                          src_suffix='.prj',
+                          emitter=xst_targets)
 

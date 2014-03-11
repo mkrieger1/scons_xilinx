@@ -49,15 +49,8 @@ def run_bitgen(env, target, source):
 
 #----------------------------------------------------------
 
-def generate(env, **kw):
-    bitgen_builder = Builder(action=run_bitgen,
-                          suffix='.bit',
-                          src_suffix='.ncd',
-                          emitter=bitgen_emitter)
-
-    env.Append(BUILDERS={'BitGen': bitgen_builder})
-    
-# this is not actually called by scons...
-def exists(env):
-    return env.Detect('bitgen')
+bitgen_builder = Builder(action=run_bitgen,
+                      suffix='.bit',
+                      src_suffix='.ncd',
+                      emitter=bitgen_emitter)
 

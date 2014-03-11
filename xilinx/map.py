@@ -43,15 +43,8 @@ def run_map(env, target, source):
 
 #----------------------------------------------------------
 
-def generate(env, **kw):
-    map_builder = Builder(action=run_map,
-                          suffix='_map.ncd',
-                          src_suffix='.ngd',
-                          emitter=map_targets)
-
-    env.Append(BUILDERS={'Map': map_builder})
-    
-# this is not actually called by scons...
-def exists(env):
-    return env.Detect('map')
+map_builder = Builder(action=run_map,
+                      suffix='_map.ncd',
+                      src_suffix='.ngd',
+                      emitter=map_targets)
 

@@ -45,14 +45,8 @@ def run_coregen(env, target, source):
 
 #----------------------------------------------------------
 
-def generate(env, **kw):
-    coregen_builder = Builder(action=run_coregen,
-                              suffix='.v',
-                              src_suffix='.xco',
-                              emitter=coregen_targets)
-    env.Append(BUILDERS={'Coregen': coregen_builder})
+coregen_builder = Builder(action=run_coregen,
+                          suffix='.v',
+                          src_suffix='.xco',
+                          emitter=coregen_targets)
     
-# this is not actually called by scons...
-def exists(env):
-    return env.Detect('coregen')
-
