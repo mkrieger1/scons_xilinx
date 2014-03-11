@@ -22,11 +22,16 @@ def run_xst(env, target, source):
     prj = tempfile.NamedTemporaryFile(suffix='.prj', dir='.')
     prj_file = prj.name
     tmpdir = tempfile.mkdtemp(dir='.')
+    try:
+        libraries = env['libraries']
+    except KeyError:
+        libraries = {}
 
     for s in source:
         lang = {'.v': 'verilog',
                 '.vhd': 'vhdl'}[get_suffix(s)]
-        print >> prj, '%s work "%s"' % (lang, str(s))
+        lib = libraries.get(str(s), 'work')
+        print >> prj, '%s %s "%s"' % (lang, lib, str(s))
     prj.flush()
 
     options = env['options']
