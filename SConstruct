@@ -18,3 +18,8 @@ source = [join('xilinx', f) for f in listdir('xilinx')]
 
 Alias('install', Install(target, source))
 
+
+# build readme
+
+env.Command('readme.html', 'readme.rst', 'rst2html.py $SOURCE > $TARGET')
+
