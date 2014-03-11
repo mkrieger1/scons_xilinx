@@ -33,6 +33,8 @@ def run_map(env, target, source):
     env.Execute('map %s %s %s %s' % (opt_str, flag_str,
                                      ngd_file, pcf_file))
 
+    # TODO _map.xrpt is actually prefixed with the top-level module, not
+    # the NGD filename
     for suf in ['_map.xrpt', '_summary.xml', '_usage.xml']:
         Execute(Delete(replace_suffix(ngd_file, suf)))
     for suf in ['.map', '.ngm']:

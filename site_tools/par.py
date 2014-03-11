@@ -31,6 +31,8 @@ def run_par(env, target, source):
     env.Execute('par %s %s %s %s %s' % (opt_str, flag_str,
                                         ncd_map, ncd_file, pcf_file))
 
+    # TODO _par.xrpt is actually prefixed with the top-level module, not
+    # the NCD filename
     for suf in ['_par.xrpt', '.pad', '_pad.csv', '_pad.txt',
                 '.ptwx', '.unroutes', '.xpi']:
         Execute(Delete(replace_suffix(ncd_file, suf)))
