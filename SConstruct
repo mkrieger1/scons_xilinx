@@ -21,5 +21,8 @@ Alias('install', Install(target, source))
 
 # build readme
 
-env.Command('readme.html', 'readme.rst', 'rst2html.py $SOURCE > $TARGET')
+readme_html = env.Command('readme.html', 'readme.rst',
+                          'rst2html.py $SOURCE > $TARGET')
+Alias('doc', readme_html)
+Default(None) # must explicitly call `scons doc`
 

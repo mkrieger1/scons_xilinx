@@ -72,7 +72,7 @@ you can point SCons to it either by passing the command line argument
 
 .. code::
 
-    env = Environment(tools=['xilinx'], toolpath=[<root>])
+    env = Environment(tools=['xilinx'], toolpath=['<root>'])
 
 in the ``SConstruct``/``SConscript`` file.
 
