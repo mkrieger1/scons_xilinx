@@ -1,9 +1,8 @@
 # ex: set syntax=python:
 
-from os import listdir, environ
+from os import listdir
 from os.path import join, expanduser
 
-env = Environment(ENV=environ)
 AddOption('--user', dest='user', action='store_true')
 
 path = (expanduser('~/.scons')
