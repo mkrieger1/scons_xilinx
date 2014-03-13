@@ -29,34 +29,27 @@ To see in more detail how the tools can be used, look at the
 Installation
 ============
 
-Copy the entire `xilinx` directory into a directory
-`<root>/site_scons/site_tools`, where `<root>` must be visible to SCons
-when invoked.
+Copy the entire `site_tools/xilinx` tree to a location you like.
 
-By default, SCons accepts the following locations as `<root>`:
+SCons will find it in one of the following locations by default:
 
-- the current working directory (where `SConstruct`/`SConscript` is)
-- `$HOME/.scons` (installation for single user)
-- `/usr/share/scons` (installation for all users)
+- `./site_scons` (relative to your `SConstruct`/`SConscript`)
+- `$HOME/.scons/site_scons`
+- `/usr/share/scons/site_scons`
 
-The file copying is handled for you if you call
+If you choose a different location, you can point SCons to it using the
+`--site-dir` command line option or by passing it as the `toolpath`
+argument to the `Environment` constructor (read more
+[here](http://www.scons.org/doc/production/HTML/scons-user.html#idm28309816)).
 
-    scons install [--user] [--location=<root>]
+The file copying is handled for you if you call:
 
-The `--location` option specifies the `<root>` directory where the
-`site_scons/site_tools/xilinx` tree will be created. If the `--location`
-option is not given,`$HOME/.scons` will be used as `<root>` if the
-`--user` flag is set,`/usr/share/scons` will be used otherwise.
+    scons install [--user|--prefix=<location>]
 
-If you choose to copy the tools to a custom location, you can
-point SCons to it either by passing the command line argument
-`--site-dir=<root>` or by using
-
-```python
-env = Environment(tools=['xilinx'], toolpath=['<root>'])
-```
-
-in the `SConstruct`/`SConscript` file.
+If the `--prefix` option is given, it specifies the directory into which
+the `site_tools/xilinx` tree will be copied. If it is not given and the
+`--user` flag is set,`$HOME/.scons/site_scons` will be used,
+`/usr/share/scons/site_scons` otherwise.
 
   [SCons]: http://www.scons.org/
   [Builders]: http://www.scons.org/doc/production/HTML/scons-user.html#chap-builders-writing
