@@ -3,7 +3,14 @@
 from os import listdir
 from os.path import join, expanduser
 
-AddOption('--user', dest='user', action='store_true')
+loc_user = expanduser('~/.scons')
+loc_sys = '/usr/share/scons'
+
+AddOption('--user', dest='location', action='store_const', const=loc_user)
+AddOption('--location', dest='location', action='store', default=loc_sys)
+
+print GetOption('location')
+raise SystemExit
 
 path = (expanduser('~/.scons')
         if GetOption('user') else '/usr/share/scons')
