@@ -41,12 +41,14 @@ By default, SCons accepts the following locations as `<root>`:
 
 The file copying is handled for you if you call
 
-    scons install [--user]
+    scons install [--user] [--location=<root>]
 
-where the presence of the `--user` option selects between the `$HOME/.scons`
-and the `/usr/share/scons` location.
+The `--location` option specifies the `<root>` directory where the
+`site_scons/site_tools/xilinx` tree will be created. If the `--location`
+option is not given,`$HOME/.scons` will be used as `<root>` if the
+`--user` flag is set,`/usr/share/scons` will be used otherwise.
 
-If you choose to copy the tools to a different `<root>` location, you can
+If you choose to copy the tools to a custom location, you can
 point SCons to it either by passing the command line argument
 `--site-dir=<root>` or by using
 
