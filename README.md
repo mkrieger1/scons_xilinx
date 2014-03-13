@@ -16,7 +16,7 @@ The package makes a set of [Builders][] available, which you can use in a
 |`PlaceRoute`  |`_map.ncd`    |`.ncd`        |
 |`BitGen`      |`.ncd`        |`.bit`        |
 
-Example:
+Example usage:
 
 ```python
 env = Environment(tools=['xilinx'])
@@ -43,7 +43,7 @@ The file copying is handled for you if you call
 
     scons install [--user]
 
-where the presence of the `--user` option selects between the `~/.scons`
+where the presence of the `--user` option selects between the `$HOME/.scons`
 and the `/usr/share/scons` location.
 
 If you choose to copy the tools to a different `<root>` location, you can
