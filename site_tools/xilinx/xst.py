@@ -27,6 +27,12 @@ def run_xst(env, target, source):
     except KeyError:
         libraries = {}
 
+    # The keys in `libraries` can be relative paths, but we try to look
+    # them up using `str(s)` (`s` being a `File` object), which is
+    # probably an absolute path -- to make sure that the filenames are in
+    # the same format, we also apply `str(File(f))` to all keys `f` in the
+    # dictionary:
+    libraries = {str(File(f)): L for (f, L) in libraries.iteritems()}
     for s in source:
         lang = {'.v': 'verilog',
                 '.vhd': 'vhdl'}[get_suffix(s)]
