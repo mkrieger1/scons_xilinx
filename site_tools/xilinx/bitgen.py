@@ -39,13 +39,16 @@ def run_bitgen(env, target, source):
     subopt_str = ' '.join(subopt_list)
     opt_str = ' '.join('-%s %s' % (k, options[k]) for k in options)
     flag_str = ' '.join('-%s' % f for f in flags)
-    env.Execute('bitgen %s %s %s %s %s %s' % (opt_str, subopt_str,
-                flag_str, ncd_file, bit_file, pcf_file))
+    status = env.Execute('bitgen %s %s %s %s %s %s' % (
+                         opt_str, subopt_str, flag_str,
+                         ncd_file, bit_file, pcf_file))
 
     for suf in ['_bitgen.xwbt', '_summary.xml', '_usage.xml', '.drc']:
         Execute(Delete(replace_suffix(bit_file, suf)))
     Execute(Delete('webtalk.log')) # why is this not deleted??
     Execute(Delete('_xmsgs')) # why is this not deleted??
+
+    return status
 
 #----------------------------------------------------------
 

@@ -28,8 +28,9 @@ def run_par(env, target, source):
     opt_str = ' '.join('-%s %s' % (k, options[k]) for k in options)
     flag_str = ' '.join('-%s' % f for f in flags)
     
-    env.Execute('par %s %s %s %s %s' % (opt_str, flag_str,
-                                        ncd_map, ncd_file, pcf_file))
+    status = env.Execute('par %s %s %s %s %s' % (
+                          opt_str, flag_str,
+                          ncd_map, ncd_file, pcf_file))
 
     # TODO _par.xrpt is actually prefixed with the top-level module, not
     # the NCD filename
@@ -38,6 +39,8 @@ def run_par(env, target, source):
         Execute(Delete(replace_suffix(ncd_file, suf)))
     Execute(Delete('par_usage_statistics.html'))
     Execute(Delete('_xmsgs'))
+
+    return status
 
 #----------------------------------------------------------
 

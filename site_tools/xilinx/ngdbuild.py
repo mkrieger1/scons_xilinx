@@ -35,12 +35,15 @@ def run_ngdbuild(env, target, source):
     
     ngc_file = str(source[0])
     ngd_file, bld_file = map(str, target)
-    env.Execute('ngdbuild %s %s %s' % (opt_str, ngc_file, ngd_file))
+    status = env.Execute('ngdbuild %s %s %s' % (
+                         opt_str, ngc_file, ngd_file))
 
     Execute(Delete(tmpdir))
     Execute(Delete(replace_suffix(ngc_file, '_ngdbuild.xrpt')))
     Execute(Delete('xlnx_auto_0_xdb'))
     Execute(Delete('_xmsgs'))
+
+    return status
 
 #----------------------------------------------------------
 

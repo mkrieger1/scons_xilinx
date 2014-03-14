@@ -55,8 +55,8 @@ def run_xst(env, target, source):
         for k, v in options.iteritems():
             print >> f, "-%s %s" % (k, str(v))
         f.flush()
-        env.Execute('xst %s -ifn %s -ofn %s' % (
-                    intstyle, f.name, syr_file))
+        status = env.Execute('xst %s -ifn %s -ofn %s' % (
+                             intstyle, f.name, syr_file))
 
     prj.close()
     for suf in ['.lso', '.ngc_xst.xrpt']:
@@ -64,6 +64,8 @@ def run_xst(env, target, source):
     Execute(Delete(tmpdir))
     Execute(Delete('xst'))
     Execute(Delete('_xmsgs'))
+
+    return status
 
 #----------------------------------------------------------
 

@@ -30,8 +30,8 @@ def run_map(env, target, source):
     opt_str = ' '.join('-%s %s' % (k, v) for (k, v) in options.iteritems())
     flag_str = ' '.join('-%s' % f for f in flags)
     
-    env.Execute('map %s %s %s %s' % (opt_str, flag_str,
-                                     ngd_file, pcf_file))
+    status = env.Execute('map %s %s %s %s' % (
+                         opt_str, flag_str, ngd_file, pcf_file))
 
     # TODO _map.xrpt is actually prefixed with the top-level module, not
     # the NGD filename
@@ -40,6 +40,8 @@ def run_map(env, target, source):
     for suf in ['.map', '.ngm']:
         Execute(Delete(replace_suffix(ncd_file, suf)))
     Execute(Delete('_xmsgs'))
+
+    return status
 
 #----------------------------------------------------------
 

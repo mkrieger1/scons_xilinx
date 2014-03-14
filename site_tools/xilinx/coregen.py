@@ -34,7 +34,7 @@ def run_coregen(env, target, source):
         for (k, v) in options.iteritems():
             print >> f, "SET %s = %s" % (k, str(v))
         f.flush()
-        env.Execute('coregen -b %s -p %s' % (xco_file, cgp_file))
+        status = env.Execute('coregen -b %s -p %s' % (xco_file, cgp_file))
 
     for t in target[:-1]: # .v, .ngc, .xco
         Execute(Move(t, replace_path(t, out_dir)))
@@ -42,6 +42,8 @@ def run_coregen(env, target, source):
     Execute(Delete(work_dir))
     Execute(Delete(out_dir))
     Execute(Delete(replace_suffix(cgp_file, '.cgc')))
+
+    return status
 
 #----------------------------------------------------------
 
