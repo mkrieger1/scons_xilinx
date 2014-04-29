@@ -59,11 +59,15 @@ def run_xst(env, target, source):
                              intstyle, f.name, syr_file))
 
     prj.close()
-    for suf in ['.lso', '.ngc_xst.xrpt']:
-        Execute(Delete(replace_suffix(ngc_file, suf)))
+    Execute(Delete(replace_suffix(ngc_file, '.ngc_xst.xrpt')))
+    Execute(Delete(options['top']+'.lso'))
     Execute(Delete(tmpdir))
     Execute(Delete('xst'))
     Execute(Delete('_xmsgs'))
+
+    # export name of top level module so that some output files of MAP and
+    # PAR can be deleted later
+    env.xst_top = options['top']
 
     return status
 

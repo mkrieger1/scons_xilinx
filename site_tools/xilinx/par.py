@@ -32,11 +32,12 @@ def run_par(env, target, source):
                           opt_str, flag_str,
                           ncd_map, ncd_file, pcf_file))
 
-    # TODO _par.xrpt is actually prefixed with the top-level module, not
-    # the NCD filename
-    for suf in ['_par.xrpt', '.pad', '_pad.csv', '_pad.txt',
+    for suf in ['.pad', '_pad.csv', '_pad.txt',
                 '.ptwx', '.unroutes', '.xpi']:
         Execute(Delete(replace_suffix(ncd_file, suf)))
+    # _par.xrpt is actually prefixed with the top-level module, not the
+    # NCD filename -> env.xst_top is set in the XstSynthesis builder
+    Execute(Delete(env.xst_top+'_par.xrpt'))
     Execute(Delete('par_usage_statistics.html'))
     Execute(Delete('_xmsgs'))
 
