@@ -6,7 +6,7 @@ env = Environment(ENV=os.environ, tools=['xilinx'])
 from xilinx.boards import susibo as device
 
 # project name + source files
-project_name = 'example'
+project_name = 'exampleproject'
 
 xco_files = ['cores/fifo.xco']
 hdl_files = ['src/example.v']
@@ -28,7 +28,7 @@ xst_sd = '{%s}' % (' '.join(search_dirs))
 
 xst_options.update({
     'intstyle': 'xflow',
-    'top': project_name,
+    'top': 'example',
     'opt_mode': 'speed',
     'opt_level': 1,
     'read_cores': 'optimize',
@@ -49,14 +49,16 @@ map_options = {'intstyle': 'xflow'}
 map_flags = ['detail', 'w']
 
 ncd_map_file, mrp_file, pcf_file = env.Map(ngd_file, options=map_options,
-                                                      flags=map_flags)
+                                           flags=map_flags,
+                                           xst_top=xst_options['top'])
 
 # PAR
 par_options = {'intstyle': 'xflow'}
 par_flags = ['w']
 
 ncd_file, par_file = env.PlaceRoute(ncd_map_file, options=par_options,
-                                                  flags=par_flags)
+                                    flags=par_flags,
+                                    xst_top=xst_options['top'])
 
 
 # BitGen
