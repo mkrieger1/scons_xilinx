@@ -65,10 +65,6 @@ def run_xst(env, target, source):
     Execute(Delete('xst'))
     Execute(Delete('_xmsgs'))
 
-    # export name of top level module so that some output files of MAP and
-    # PAR can be deleted later
-    env.xst_top = options['top']
-
     return status
 
 #----------------------------------------------------------

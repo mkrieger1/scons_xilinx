@@ -36,8 +36,11 @@ def run_par(env, target, source):
                 '.ptwx', '.unroutes', '.xpi']:
         Execute(Delete(replace_suffix(ncd_file, suf)))
     # _par.xrpt is actually prefixed with the top-level module, not the
-    # NCD filename -> env.xst_top is set in the XstSynthesis builder
-    Execute(Delete(env.xst_top+'_par.xrpt'))
+    # NCD filename -> get xst_top from env
+    try:
+        Execute(Delete(env['xst_top']+'_par.xrpt'))
+    except KeyError:
+        pass
     Execute(Delete('par_usage_statistics.html'))
     Execute(Delete('_xmsgs'))
 

@@ -36,8 +36,11 @@ def run_map(env, target, source):
     for suf in ['_summary.xml', '_usage.xml']:
         Execute(Delete(replace_suffix(ngd_file, suf)))
     # _map.xrpt is actually prefixed with the top-level module, not the
-    # NGD filename -> env.xst_top is set in the XstSynthesis builder
-    Execute(Delete(env.xst_top+'_map.xrpt'))
+    # NGD filename -> get xst_top from env
+    try:
+        Execute(Delete(env['xst_top']+'_map.xrpt'))
+    except KeyError:
+        pass
     for suf in ['.map', '.ngm']:
         Execute(Delete(replace_suffix(ncd_file, suf)))
     Execute(Delete('_xmsgs'))
